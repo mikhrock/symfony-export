@@ -11,7 +11,7 @@ services:
       - php
     volumes:
       - ./logs/nginx:/var/log/nginx:cached
-      - ./symfony:/var/www/symfony:cached
+      - ./app:/var/www/app:cached
 
   mysql:
     image: mysql:8
