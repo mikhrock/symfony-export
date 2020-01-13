@@ -1,9 +1,17 @@
 version: '3'
 
+networks:
+  internal:
+    driver: bridge
+    ipam:
+      driver: default
+
 services:
   nginx:
     image: nginx:alpine
     container_name: se_nginx
+    build: .docker/nginx
+#    command: /bin/sh -c "envsubst '$$NGINX_HOST' < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
     ports:
       - ${NGINX_PORT}:80
       - ${NGINX_SSL_PORT}:443
@@ -12,6 +20,8 @@ services:
     volumes:
       - ./logs/nginx:/var/log/nginx:cached
       - ./app:/var/www/app:cached
+    networks:
+      - internal
 
   mysql:
     image: mysql:8
@@ -26,17 +36,24 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    networks:
+      - internal
 
   php:
     build: .docker/php
     container_name: se_php
+    ports:
+      - ${PHP_PORT}:9000
     volumes:
-      - .:/home/wwwroot/se
+      - ./app:/var/www/app:cached
+      - ./logs/symfony:/var/www/app/var/log:cached
     environment:
       - maildev_host=se_maildev
     depends_on:
       - maildev
       - mysql
+    networks:
+      - internal
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -48,9 +65,13 @@ services:
       - ${PHPMYADMIN_PORT}:80
     links:
       - mysql
+    networks:
+      - internal
 
   maildev:
     image: djfarrelly/maildev
     container_name: se_maildev
     ports:
       - ${MAILDEV_PORT}:80
+    networks:
+      - internal
