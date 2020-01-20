@@ -19,7 +19,7 @@ RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     echo "fr_FR.UTF-8 UTF-8" >> /etc/locale.gen && \
     locale-gen
 
-WORKDIR /home/wwwroot/
+WORKDIR /var/www/app/
 
 EXPOSE 9000
 CMD ["php-fpm"]
