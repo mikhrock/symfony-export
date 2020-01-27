@@ -24,14 +24,18 @@ abstract class BaseFixture extends Fixture
         $this->loadData($manager);
     }
 
-    protected function createMany(string $className, int $count, callable $factory)
+    protected function createMany(int $count, string $groupName, callable $factory)
     {
-        for ($i=0; $i < $count; $i++) {
-            $entity = new $className();
-            $factory($entity, $i);
+        for ($i = 0; $i < $count; $i++) {
+            $entity = $factory($i);
+
+            if (null === $entity) {
+                throw new \LogicException('Did you forget to return the entity object from your callback to BaseFixture::createMany()?');
+            }
 
             $this->manager->persist($entity);
-            $this->addReference($className . '_' . $i, $entity);
+
+            $this->addReference(sprintf('%s_%d', $groupName, $i), $entity);
         }
     }
 }
