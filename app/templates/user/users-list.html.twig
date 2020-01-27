@@ -1,7 +1,40 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
+{% block content %}
 
-    <h1>Your lucky number is {{ number }}</h1>
+        <div class="row p-3">
+            <h1>Users</h1>
+        </div>
+
+        <div class="py-1">
+            Total Users: {{ pagination.getTotalItemCount }}
+        </div>
+
+        <div class="row">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Email</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for user in pagination %}
+                        <tr>
+                            <th scope="row">{{ user.id }}</th>
+                            <td>{{ user.firstName }}</td>
+                            <td>{{ user.lastName }}</td>
+                            <td>{{ user.email }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="navigation">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+        </div>
 
 {% endblock %}
