@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sign up{% endblock %}
+
+{% block content %}
+    <div class="row p-3">
+        <h1 class="h3 mb-3 font-weight-normal">Sign up</h1>
+    </div>
+
+    {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.email) }}
+        {{ form_row(registrationForm.firstName) }}
+        {{ form_row(registrationForm.lastName) }}
+        {{ form_row(registrationForm.plainPassword) }}
+
+        <button class="btn btn-lg btn-primary">Sign up</button>
+    {{ form_end(registrationForm) }}
+
+    <div class="row p-3">
+        Already have an account? <a href="{{ path('app_login') }}">Please log in here</a>
+    </div>
+{% endblock %}
