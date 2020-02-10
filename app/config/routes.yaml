@@ -5,3 +5,7 @@
 app_homepage:
   path: /
   controller: App\Controller\UserController::index
+
+app_export:
+  path: /export
+  controller: App\Controller\UserController::exportAction
