@@ -34,8 +34,6 @@ class UserController extends AbstractController
      */
     public function index(UserRepository $repository, PaginatorInterface $paginator)
     {
-        $users = $repository->findAll();
-
         $pagination = $paginator->paginate(
             $repository->createQueryBuilder('u')->getQuery(),
             $this->requestStack->getCurrentRequest()->query->getInt('page', 1),
@@ -43,7 +41,6 @@ class UserController extends AbstractController
         );
 
         return $this->render('user/users-list.html.twig', [
-            'users' => $users,
             'pagination' => $pagination,
         ]);
     }

@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -10,29 +11,34 @@ class UserFixtures extends BaseFixture
 {
     private $passwordEncoder;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    private $userRepository;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, UserRepository $userRepository)
     {
         $this->passwordEncoder = $passwordEncoder;
+        $this->userRepository = $userRepository;
     }
 
     public function loadData(ObjectManager $manager)
     {
-        $this->createMany(92, 'main_users', function ($i) {
+        $this->createMany(1000, 'main_users', function () {
             $user = new User();
-            $user->setEmail($this->faker->email());
+
+            do {
+                $email = $this->faker->unique()->email;
+            } while ($this->userRepository->findBy(['email' => $email]));
+
+            $user->setEmail($email);
             $user->setRoles(['ROLE_USER']);
-            $user->setPassword($this->passwordEncoder->encodePassword(
-                $user,
-                'demo'
-            ));
+            $user->setPassword('demo');
             $user->setFirstName($this->faker->firstName());
             $user->setLastName($this->faker->lastName());
-            $user->setDateCreated($this->faker->dateTime());
+            $user->setDateCreated($this->faker->dateTimeThisDecade());
 
             return $user;
         });
 
-        $this->createMany(3, 'admin_users', function ($i) {
+        $this->createMany(2, 'admin_users', function ($i) {
             $user = new User();
             $user->setEmail(sprintf('admin%d@admin.com', $i));
             $user->setRoles(['ROLE_ADMIN']);
@@ -42,7 +48,7 @@ class UserFixtures extends BaseFixture
             ));
             $user->setFirstName($this->faker->firstName());
             $user->setLastName($this->faker->lastName());
-            $user->setDateCreated($this->faker->dateTime());
+            $user->setDateCreated($this->faker->dateTimeThisDecade());
 
             return $user;
         });
