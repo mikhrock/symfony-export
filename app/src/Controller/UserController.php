@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\CustomBundles\CsvExportBundle\CsvExportBundle;
 use App\Entity\User;
+use App\Message\UserExportMessage;
 use App\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,7 +12,9 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserController extends AbstractController
 {
@@ -45,19 +48,17 @@ class UserController extends AbstractController
         ]);
     }
 
-    public function exportAction(UserRepository $repository)
+    public function exportAction(UserRepository $repository, MessageBusInterface $messageBus)
     {
-        $sortDirection = $this->requestStack->getCurrentRequest()->query->get('sortDirection');
+
+        $userExportMessage = new UserExportMessage($this->getUser()->getEmail());
+        $messageBus->dispatch($userExportMessage);
+
+        /*$sortDirection = $this->requestStack->getCurrentRequest()->query->get('sortDirection');
         if (empty($sortDirection) || !in_array(strtoupper($sortDirection), ['ASC', 'DESC'])) {
             $sortDirection = 'DESC';
-        }
+        }*/
 
-        $queryBuilder = $repository->createQueryBuilder('u');
-
-        return $this->csvExportBundle->getResponseFromQueryBuilder(
-            $queryBuilder,
-            User::class,
-            'users.csv'
-        );
+        return $this->render('user/users-export-message.html.twig');
     }
 }

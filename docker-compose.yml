@@ -76,3 +76,13 @@ services:
       - ${MAILDEV_PORT}:80
     networks:
       - internal
+
+#  rabbitmq:
+#    image: rabbitmq:3
+#    container_name: se_rabbitmq
+#    ports:
+#      - 5672:5672
+#    volumes:
+#      - .docker/rabbitmq:/var/lib/rabbitmq/mnesia:cached
+#    networks:
+#      - internal

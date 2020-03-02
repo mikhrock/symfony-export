@@ -51,6 +51,43 @@ class CsvExportBundle extends Bundle
         return $response;
     }
 
+    public function getFileFromQueryBuilder(QueryBuilder $queryBuilder, $columns, $filename)
+    {
+        $entities = new ArrayCollection($queryBuilder->getQuery()->getResult());
+
+        if (is_string($columns)) {
+            $columns = $this->getColumnsForEntity($columns);
+        }
+
+        $file = tempnam(sys_get_temp_dir(), 'se');
+
+        $handle = fopen($file, 'w+');
+
+        fputcsv($handle, array_keys($columns));
+
+        while ($entity = $entities->current()) {
+            $values = [];
+
+            foreach ($columns as $column => $callback) {
+                $value = $callback;
+
+                if (is_callable($callback)) {
+                    $value = $callback($entity);
+                }
+
+                $values[] = $value;
+            }
+
+            fputcsv($handle, $values);
+
+            $entities->next();
+        }
+
+        fclose($handle);
+
+        return $file;
+    }
+
     private function getColumnsForEntity($class)
     {
         $columns[User::class] = [

@@ -4,8 +4,11 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends vim curl debconf subversion git apt-transport-https apt-utils \
     build-essential locales acl mailutils wget zip unzip \
     gnupg gnupg1 gnupg2 \
+    librabbitmq-dev \
     && pecl install xdebug-2.7.1 \
-    && docker-php-ext-enable xdebug
+    amqp \
+    && docker-php-ext-enable xdebug \
+    amqp
 RUN docker-php-ext-install pdo pdo_mysql
 COPY php.ini /usr/local/etc/php/php.ini
 COPY php-fpm-pool.conf /etc/php/7.2.3/pool.d/www.conf
