@@ -10,6 +10,14 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class CsvExportBundle extends Bundle
 {
+    /**
+     * Old function which returns CSV file in response
+     *
+     * @param QueryBuilder $queryBuilder
+     * @param $columns
+     * @param $filename
+     * @return StreamedResponse
+     */
     public function getResponseFromQueryBuilder(QueryBuilder $queryBuilder, $columns, $filename)
     {
         $entities = new ArrayCollection($queryBuilder->getQuery()->getResult());
@@ -51,7 +59,14 @@ class CsvExportBundle extends Bundle
         return $response;
     }
 
-    public function getFileFromQueryBuilder(QueryBuilder $queryBuilder, $columns, $filename)
+    /**
+     * Currently used function which returns CSV file
+     *
+     * @param QueryBuilder $queryBuilder
+     * @param $columns
+     * @return bool|string
+     */
+    public function getFileFromQueryBuilder(QueryBuilder $queryBuilder, $columns)
     {
         $entities = new ArrayCollection($queryBuilder->getQuery()->getResult());
 
@@ -88,6 +103,10 @@ class CsvExportBundle extends Bundle
         return $file;
     }
 
+    /**
+     * @param $class
+     * @return mixed
+     */
     private function getColumnsForEntity($class)
     {
         $columns[User::class] = [

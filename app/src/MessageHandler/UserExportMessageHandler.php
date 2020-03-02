@@ -31,6 +31,12 @@ class UserExportMessageHandler implements MessageHandlerInterface
      */
     private $twig;
 
+    /**
+     * @param UserRepository $repository
+     * @param CsvExportBundle $csvExportBundle
+     * @param \Swift_Mailer $mailer
+     * @param Environment $twig
+     */
     public function __construct(UserRepository $repository, CsvExportBundle $csvExportBundle, \Swift_Mailer $mailer, Environment $twig)
     {
         $this->repository = $repository;
@@ -39,6 +45,12 @@ class UserExportMessageHandler implements MessageHandlerInterface
         $this->twig = $twig;
     }
 
+    /**
+     * @param UserExportMessage $userExportMessage
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
     public function __invoke(UserExportMessage $userExportMessage)
     {
         $queryBuilder = $this->repository->createQueryBuilder('u');
@@ -47,8 +59,7 @@ class UserExportMessageHandler implements MessageHandlerInterface
 
         $file = $this->csvExportBundle->getFileFromQueryBuilder(
             $queryBuilder,
-            User::class,
-            $filename
+            User::class
         );
 
         $message = (new \Swift_Message('User Export'))
