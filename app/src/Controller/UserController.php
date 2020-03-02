@@ -63,7 +63,6 @@ class UserController extends AbstractController
      */
     public function exportAction(MessageBusInterface $messageBus)
     {
-
         $userExportMessage = new UserExportMessage($this->getUser()->getEmail());
         $messageBus->dispatch($userExportMessage);
 
