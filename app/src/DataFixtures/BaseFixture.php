@@ -8,14 +8,25 @@ use Faker\Factory;
 
 abstract class BaseFixture extends Fixture
 {
-    /** @var ObjectManager */
+    /**
+     * @var ObjectManager
+     */
     private $manager;
 
-    /** @var Generator */
+    /**
+     * @var Generator
+     */
     protected $faker;
 
+    /**
+     * @param ObjectManager $manager
+     */
     abstract protected function loadData(ObjectManager $manager);
 
+    /**
+     * @param ObjectManager $manager
+     * @return void
+     */
     public function load(ObjectManager $manager)
     {
         $this->manager = $manager;
@@ -24,6 +35,12 @@ abstract class BaseFixture extends Fixture
         $this->loadData($manager);
     }
 
+    /**
+     * @param int $count
+     * @param string $groupName
+     * @param callable $factory
+     * @return void
+     */
     protected function createMany(int $count, string $groupName, callable $factory)
     {
         for ($i = 0; $i < $count; $i++) {

@@ -50,16 +50,26 @@ class User implements UserInterface
      */
     private $date_created;
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
+    /**
+     * @param string $email
+     * @return User
+     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -71,6 +81,7 @@ class User implements UserInterface
      * A visual identifier that represents this user.
      *
      * @see UserInterface
+     * @return string
      */
     public function getUsername(): string
     {
@@ -79,6 +90,7 @@ class User implements UserInterface
 
     /**
      * @see UserInterface
+     * @return array
      */
     public function getRoles(): array
     {
@@ -89,6 +101,10 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
+    /**
+     * @param array $roles
+     * @return User
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -98,12 +114,17 @@ class User implements UserInterface
 
     /**
      * @see UserInterface
+     * @return string
      */
     public function getPassword(): string
     {
         return (string) $this->password;
     }
 
+    /**
+     * @param string $password
+     * @return User
+     */
     public function setPassword(string $password): self
     {
         $this->password = $password;
@@ -128,11 +149,18 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
+    /**
+     * @return string|null
+     */
     public function getFirstName(): ?string
     {
         return $this->first_name;
     }
 
+    /**
+     * @param string $first_name
+     * @return User
+     */
     public function setFirstName(string $first_name): self
     {
         $this->first_name = $first_name;
@@ -140,11 +168,18 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getLastName(): ?string
     {
         return $this->last_name;
     }
 
+    /**
+     * @param string $last_name
+     * @return User
+     */
     public function setLastName(string $last_name): self
     {
         $this->last_name = $last_name;
@@ -152,11 +187,18 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @return \DateTimeInterface|null
+     */
     public function getDateCreated(): ?\DateTimeInterface
     {
         return $this->date_created;
     }
 
+    /**
+     * @param \DateTimeInterface $date_created
+     * @return User
+     */
     public function setDateCreated(\DateTimeInterface $date_created): self
     {
         $this->date_created = $date_created;

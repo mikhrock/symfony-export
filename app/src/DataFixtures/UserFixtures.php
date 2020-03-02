@@ -9,16 +9,30 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserFixtures extends BaseFixture
 {
+    /**
+     * @var UserPasswordEncoderInterface
+     */
     private $passwordEncoder;
 
+    /**
+     * @var UserRepository
+     */
     private $userRepository;
 
+    /**
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param UserRepository $userRepository
+     */
     public function __construct(UserPasswordEncoderInterface $passwordEncoder, UserRepository $userRepository)
     {
         $this->passwordEncoder = $passwordEncoder;
         $this->userRepository = $userRepository;
     }
 
+    /**
+     * @param ObjectManager $manager
+     * @return void
+     */
     public function loadData(ObjectManager $manager)
     {
         $this->createMany(1000, 'main_users', function () {
