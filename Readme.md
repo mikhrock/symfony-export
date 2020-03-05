@@ -12,12 +12,15 @@ Stack:
 - MailDev
 - Symfony 4
 - RabbitMQ
+- PHPUnit (on dev)
 
 Concept: An app where you can easily export half a million users to a CSV file.
 
 The whole thing runs inside docker, the web server is nginx, so large scale, much technology. Half a million guys are generated using Symfony Fixtures and Faker, just to look cool. By the way, there are also Register/Log In and user/admin features so that you could be sure I'm OK with CRUD and roles and basic stuff.
 
 So, to the fun part. The first and obvious solution for exporting these users to a CSV file was generating the file and returning it as an attachment in a response. However, this doesn't work so well when there are that much users as the download process may take up to 3 minutes, which is 2 minutes and 58 seconds more than most of the app's users are willing to wait. That's why I use Messenger system and RabbitMQ to put export requests in a queue, work on them in the background and send an email with the file when it's ready. 
+
+Also, PHPUnit is used on dev for unit testing.
 
 As simple as that, this should cover a lot of your questions. But if you still have any, feel free to ask!
 
