@@ -25,6 +25,7 @@
         "doctrine/doctrine-fixtures-bundle": "^3.3",
         "fzaninotto/faker": "^1.9",
         "symfony/maker-bundle": "^1.14",
+        "symfony/phpunit-bridge": "^5.0",
         "symfony/profiler-pack": "^1.0"
     },
     "config": {
